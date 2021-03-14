@@ -7,6 +7,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
+from alien import Alien
 
 # make an empty pygame window by creating a class to represent the game
 
@@ -27,6 +28,8 @@ class AlienInvasion:
         # we assign self.screen so it will be available in all methods
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
+        self.aliens = pygame.sprite.Group()
+        self._create_fleet()
         # set the background color
         self.bg_color = self.screen.fill(self.settings.bg_color)
 
@@ -87,12 +90,19 @@ class AlienInvasion:
         # move the ship to the right
         # self.ship.rect.x += 1
 
+    def _create_fleet(self):
+        """create a fleet of aliens"""
+        # make an alien
+        alien = Alien(self)
+        self.aliens.add(alien)
+
     def _update_screen(self):
         """update images on the screen, and flip to the new screen"""
         self.screen.fill(self.settings.bg_color)
         self.ship.blitme()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+        self.aliens.draw(self.screen)
 
         # make the most recently drawn screen visible
         pygame.display.flip()
